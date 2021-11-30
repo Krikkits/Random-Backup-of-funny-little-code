@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body onload="squares()">
+    <center>
+    <canvas id="canvas" width="1300" height="800"></canvas>
+  </center>
+    <button style="width: 100px; height: 50px;" onclick="reset()">New squares</button>
+    <button style="width: 100px; height: 50px;" onclick="squaresContinue()">MORE!!!</button>
+    <button style="width: 100px; height: 50px;" onclick="stop()">reset</button>
+
+    <script>
+      var canvas=document.getElementById("canvas");
+      var ctx=canvas.getContext("2d");
+      var interval;
+
+      function randColor(){
+        var R=Math.floor(Math.random()*(255-0+1));
+        var G=Math.floor(Math.random()*(255-0+1));
+        var B=Math.floor(Math.random()*(255-0+1));
+
+        if(R<16){
+          var R="0"+R.toString(16);
+        }else{var R=R.toString(16);}
+        if(G<16){
+          var G="0"+G.toString(16);
+        }else{var G=G.toString(16);}
+        if(B<16){
+          var B="0"+B.toString(16);
+        }else{var B=B.toString(16);}
+
+        return "#"+R.toString()+G.toString()+B.toString();
+      }
+
+      function squares(){
+
+        for(var i=0;i<25;i++){
+          var randX=Math.floor(Math.random()*1200);
+          var randY=Math.floor(Math.random()*780);
+          var color=randColor();
+          ctx.beginPath();
+          ctx.fillStyle = color;
+          ctx.strokeStyle = color;
+          ctx.rect(randX, randY, 20, 20);
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+
+      function squaresContinue(){
+        interval=setInterval(squares,5);
+      }
+      function stop(){
+        clearInterval(interval);
+        ctx.clearRect(0,0,canvas.width, canvas.height)
+      }
+
+      function reset(){
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+        squares();
+      }
+
+    </script>
+
+  </body>
+</html>

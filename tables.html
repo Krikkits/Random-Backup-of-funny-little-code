@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Summing Rows</title>
+    <meta charset="utf-8"/>
+  </head>
+
+  <body onload="randomNums()">
+    <table id="nums" border="1">
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="value0"> </td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="value1"> </td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="value2"> </td>
+      </tr>
+    </table>
+
+    <button onclick="Refresh()">New Numbers</button>
+    <button onclick="Sum()">Sum</button>
+
+      <script type="text/javascript" >
+
+        var table=document.getElementById("nums");
+
+        function randomNums(){
+          for(i=0;i<=table.rows.length;i++){
+            for(j=0; j<=table.rows[i].cells.length-2;j++){
+              table.rows[i].cells[j].innerHTML=Math.floor(Math.random()*(20-(-20)+1)+(-20));
+            }
+          }
+
+      }
+
+      function Refresh(){
+        location.reload();
+      }
+
+
+        function Sum(){
+
+
+          for(var j=0;j<=table.rows.length-1;j++){
+              var sum=0;
+            for(var i=0;i<=table.rows[j].cells.length-2;i++){
+              sum+=parseInt(table.rows[j].cells[i].innerHTML);
+            }
+            table.rows[j].cells[3].innerHTML=sum;
+            if(table.rows[j].cells[3].innerHTML<0){
+            table.rows[j].cells[3].style.backgroundColor="red";
+          }
+          }
+        }
+
+      </script>
+
+  </body>
+</html>
