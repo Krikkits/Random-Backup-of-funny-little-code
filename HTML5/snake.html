@@ -1,0 +1,178 @@
+<html>
+  <head>
+    <center>
+      <h1>SNAKE</h1>
+      <style>
+	canvas {
+	background-color:#D3D3D3;
+	}
+	</style>
+  </head>
+  <body>
+    <canvas id="canvas" width="400px" height="400px"> </canvas>
+
+    <script>
+    //global variable, canvas
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var snake=[{x:3, y:2}, {x:4, y:2}, {x:5, y:2}];
+    var fruit={x:5, y:5};
+    var currentDirection={x:-1,y:0};
+
+
+
+    //drawing
+    function drawFruit(fruit){
+      var x = (fruit.x)*20;
+      var y = (fruit.y)*20;
+
+      ctx.beginPath();
+      ctx.rect(x, y, 20, 20);
+      ctx.lineWidth = "2";
+      ctx.strokeStyle = "#D3D3D3";
+      ctx.fillStyle = "#538700";
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawSnake(snake){
+      //head
+      ctx.beginPath();
+      ctx.rect(snake[0].x*20, snake[0].y*20, 20, 20);
+      ctx.fillStyle = "#000000";
+      ctx.strokeStyle="#D3D3D3";
+      ctx.fill();
+      ctx.stroke();
+
+      //body
+      for(var i=1;i<snake.length;i++){
+        var x=snake[i].x*20;
+        var y=snake[i].y*20;
+        ctx.beginPath();
+        ctx.rect(x, y,20,20);
+        ctx.lineWidth = "2";
+        ctx.strokeStyle = "#D3D3D3";
+        ctx.fillStyle = "#00538E";
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+
+    function drawGameOver(points){
+      ctx.fillStyle = "white";
+
+      ctx.font = "50px Arial";
+      ctx.fillText("GAME OVER", 50, 200);
+
+      ctx.font = "25px Arial";
+      ctx.fillText(points + " points", 165, 225);
+    }
+
+    //game states
+    function fruitCollidesWithSnake(snake, fruit){
+
+      if(snake[0].x*20==fruit.x*20 && snake[0].y*20==fruit.y*20){return true;}
+
+      return false;
+    }
+
+    function randomCoordinatesOutsideSnake(snake){
+      var newCoord={x:1, y:1};
+      var random_x=Math.floor(Math.random() * 19);
+      var random_y=Math.floor(Math.random() * 19);
+
+      for(var i=0;i<snake.length;i++){
+        if(snake[i].x==random_x && snake[i].y==random_y){
+          random_x=Math.floor(Math.random() * 19);
+          random_y=Math.floor(Math.random() * 19);
+          newCoord={random_x,random_y};
+        }
+      }
+      newCoord={x:random_x,y:random_y};
+      return newCoord;
+    }
+
+    function snakeHeadCollidesWithSnake(snake){
+
+      for(var i=1;i<snake.length;i++){
+        if(snake[0].x==snake[i].x && snake[0].y==snake[i].y){
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function mod(n, m){
+        return ((n % m) + m) % m;
+    }
+
+    function moveSnake(snake, directionVector){
+      newHeadX = mod(( snake[0].x + directionVector.x), 20);
+      newHeadY = mod((snake[0].y + directionVector.y), 20);
+      var newHead = {x:newHeadX, y:newHeadY};
+      snake.unshift(newHead);
+      return  snake.pop();
+    }
+
+    //keyboard movements
+    document.body.addEventListener('keydown', function (event){
+      //directions
+      //links: {x:-1,y:0}
+      //rechts: {x:1,y:0}
+      //oben: {x:0,y:-1}
+      //unten: {x:0,y:1}
+      if(event.key=="ArrowLeft"){
+        if(currentDirection.x!=-1&&currentDirection.x!=1){
+          currentDirection.x=-1;
+          currentDirection.y=0;
+        }
+      }
+      if(event.key=="ArrowRight"){
+        if(currentDirection.x!=-1||currentDirection.x==1){
+          currentDirection.x=1;
+          currentDirection.y=0;
+        }
+      }
+      if(event.key=="ArrowUp"){
+        if(currentDirection.y!=-1&&currentDirection.y!=1){
+          currentDirection.x=0;
+          currentDirection.y=-1;
+        }
+      }
+      if(event.key=="ArrowDown"){
+        if(currentDirection.y!=-1||currentDirection.y==1){
+          currentDirection.x=0;
+          currentDirection.y=1;
+        }
+      }
+    })
+
+    //game loop
+
+        var intervalID = setInterval(function (){
+        ctx.clearRect(0, 0, 400, 400);
+        var tail = moveSnake(snake,currentDirection);
+
+
+        if(fruitCollidesWithSnake(snake, fruit)){
+            fruit = randomCoordinatesOutsideSnake(snake);
+            snake.push(tail);
+        }
+
+        drawFruit(fruit);
+        drawSnake(snake);
+
+        if(snakeHeadCollidesWithSnake(snake)){
+            drawGameOver(snake.length - 3);
+            clearInterval(intervalID);
+        }
+
+    }, 150);
+
+
+
+
+
+    </script>
+  </body>
+</html

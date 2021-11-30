@@ -1,0 +1,57 @@
+<!doctype html>
+
+<html lang="de">
+
+<head>
+
+<meta charset="utf-8">
+<title>Dragon</title>
+<script type="text/javascript"></script>
+
+</head>
+
+<body>
+
+    <canvas width="700px" height="350px" id="canvas"></canvas>
+    <img src="dragon.png" style="display: none" id="dragon">
+    <img src="background.png" style="display: none" id="background">
+
+
+    <script onload="draw()">
+
+      var x=0.1;
+      var canvas=document.getElementById("canvas");
+      var ctx=canvas.getContext("2d");
+      var dragon=document.getElementById("dragon");
+      var width=innerWidth;
+      var height=innerHeight;
+      var xbg=0;
+      var xbg2=700;
+      var border=-1*700;
+
+      function draw(){
+        x+=0.1;
+        xbg-=5;
+        xbg2-=5;
+
+        var y=Math.sin(x)*70+100;
+
+        if(xbg<=border){xbg=canvas.width;}
+        if(xbg2<=border){xbg2=canvas.width;}
+
+        ctx.clearRect=(0,0,canvas.width,canvas.height);
+        ctx.drawImage(background,xbg,0,canvas.width, canvas.height);
+        ctx.drawImage(background,xbg2,0,canvas.width, canvas.height);
+        ctx.drawImage(dragon,100,y,200, 200);
+
+        requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+
+
+    </script>
+
+</body>
+
+</html>
